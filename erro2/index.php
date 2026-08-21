@@ -19,10 +19,7 @@ if (isset($_POST['cadastrar'])) {
     $preco = $_POST['preco'];
     $descricao = $_POST['descricao'];
 
-    $sql = "INSERT INTO produtos 
-            (nome, categoria, preco, descricao) 
-            VALUES (?, ?, ?, ?)";
-
+    $sql = "INSERT INTO produtos (nome, categoria, preco, descricao) VALUES (?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("ssds", $nome, $categoria, $preco, $descricao);
     $stmt->execute();
@@ -45,7 +42,7 @@ if (isset($_GET['excluir'])) {
     exit;
 }
 
-// EDITAR
+// EDITAR (PROCESSAMENTO)
 if (isset($_POST['editar'])) {
 
     $id = $_POST['id'];
@@ -54,27 +51,24 @@ if (isset($_POST['editar'])) {
     $preco = $_POST['preco'];
     $descricao = $_POST['descricao'];
 
-    $sql = "UPDATE produtos SET 
-            nome = ?, 
-            categoria = ?, 
-            preco = ?, 
-            descricao = ? 
-            WHERE id = ?";
-
+    $sql = "UPDATE produtos SET nome = ?, categoria = ?, preco = ?, descricao = ? WHERE id = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param(
-        "ssdsi",
-        $nome,
-        $categoria,
-        $preco,
-        $descricao,
-        $id
-    );
-
+    $stmt->bind_param("ssdsi", $nome, $categoria, $preco, $descricao, $id);
     $stmt->execute();
 
     header('Location: index.php');
     exit;
+}
+
+// BUSCAR PRODUTO PARA EDIÇÃO
+$produto_editando = null;
+if (isset($_GET['editar'])) {
+    $id_editar = $_GET['editar'];
+    $sql_edit = "SELECT id, nome, categoria, preco, descricao FROM produtos WHERE id = ?";
+    $stmt_edit = $conn->prepare($sql_edit);
+    $stmt_edit->bind_param("i", $id_editar);
+    $stmt_edit->execute();
+    $produto_editando = $stmt_edit->get_result()->fetch_assoc();
 }
 
 // LISTAR PRODUTOS
@@ -83,8 +77,8 @@ $resultado = $conn->query($sql);
 
 ?>
 
-
-<html lang="en">
+<!DOCTYPE html>
+<html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
@@ -93,29 +87,36 @@ $resultado = $conn->query($sql);
 
 <body>
 
-    <h1>Cadastro de Produtos</h1>
+    <h1><?= $produto_editando ? 'Editar Produto' : 'Cadastro de Produtos' ?></h1>
 
     <form method="POST">
 
+        <?php if ($produto_editando) { ?>
+            <input type="hidden" name="id" value="<?= htmlspecialchars($produto_editando['id']) ?>">
+        <?php } ?>
+
         <label>Nome:</label>
-        <input type="text" name="nome" required>
+        <input type="text" name="nome" value="<?= htmlspecialchars($produto_editando['nome'] ?? '') ?>" required>
         <br><br>
 
         <label>Categoria:</label>
-        <input type="text" name="categoria" required>
+        <input type="text" name="categoria" value="<?= htmlspecialchars($produto_editando['categoria'] ?? '') ?>" required>
         <br><br>
 
         <label>Preço:</label>
-        <input type="number" step="0.01" name="preco" required>
+        <input type="number" step="0.01" name="preco" value="<?= htmlspecialchars($produto_editando['preco'] ?? '') ?>" required>
         <br><br>
 
         <label>Descrição:</label>
-        <textarea name="descricao"></textarea>
+        <textarea name="descricao"><?= htmlspecialchars($produto_editando['descricao'] ?? '') ?></textarea>
         <br><br>
 
-        <button type="submit" name="cadastrar">
-            Cadastrar
-        </button>
+        <?php if ($produto_editando) { ?>
+            <button type="submit" name="editar">Atualizar</button>
+            <a href="index.php">Cancelar</a>
+        <?php } else { ?>
+            <button type="submit" name="cadastrar">Cadastrar</button>
+        <?php } ?>
 
     </form>
 
@@ -137,22 +138,23 @@ $resultado = $conn->query($sql);
 
                 <tr>
                     <td>
-                        <?= $produto['id'] ?>
+                        <?= htmlspecialchars($produto['id']) ?>
                     </td>
                     <td>
-                        <?= $produto['nome'] ?>
+                        <?= htmlspecialchars($produto['nome']) ?>
                     </td>
                     <td>
-                        <?= $produto['categoria'] ?>
+                        <?= htmlspecialchars($produto['categoria']) ?>
                     </td>
                     <td>
                         R$ <?= number_format($produto['preco'], 2, ',', '.') ?>
                     </td>
                     <td>
-                        <?= $produto['descricao'] ?>
+                        <?= htmlspecialchars($produto['descricao']) ?>
                     </td>
                     <td>
-                        <a href="index.php?excluir=<?= $produto['id'] ?>">Excluir</a>
+                        <a href="index.php?editar=<?= $produto['id'] ?>">Editar</a> |
+                        <a href="index.php?excluir=<?= $produto['id'] ?>" onclick="return confirm('Tem certeza?')">Excluir</a>
                     </td>
                 </tr>
 
