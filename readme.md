@@ -20,3 +20,12 @@ No HTML, a sintaxe de impressão rápida estava sem espaçamento entre tag '<?='
 <td><?= $usuario['nome'] ?></td>
 <td><?= $usuario['email'] ?></td>
 <a href="index.php?excluir=<?= $usuario['id'] ?>">
+
+---
+
+### 2. Erros do segundo código: erro2
+
+<!-- Errado (Como estava no código feito pelo Ícaro): -->
+
+
+<!-- Corrigido pelo aluno: Jaime Rodrigues: -->
