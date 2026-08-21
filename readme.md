@@ -26,6 +26,14 @@ No HTML, a sintaxe de impressão rápida estava sem espaçamento entre tag '<?='
 ### 2. Erros do segundo código: erro2
 
 <!-- Errado (Como estava no código feito pelo Ícaro): -->
-
+<!-- A tabela não tinha o link para editar -->
+<td>
+    <a href="index.php?excluir=<?=$usuario['id'] ?>">Excluir</a>
+</td>
 
 <!-- Corrigido pelo aluno: Jaime Rodrigues: -->
+<!-- Adicionado o link de editar e a busca do usuário para carregar os dados no formulário -->
+<td>
+    <a href="index.php?editar=<?= $usuario['id'] ?>">Editar</a> |
+    <a href="index.php?excluir=<?= $usuario['id'] ?>">Excluir</a>
+</td>
