@@ -1,11 +1,10 @@
 <?php
 
 $host = 'localhost';
-$user = 'root';
-$password = "";
+$user = 'root';$password = "";
 $database = 'crud_aula';
 
-$conn = new mysqli($host, $user, $password, $database);
+$conn = new mysqli($host,$user, $password,$database);
 
 if ($conn->connect_error) {
     die("Erro na conexão: " . $conn->connect_error);
@@ -14,14 +13,12 @@ if ($conn->connect_error) {
 // CADASTRAR
 if (isset($_POST['cadastrar'])) {
 
-    $nome = $_POST['nome'];
-    $email = $_POST['email'];
+    $nome =$_POST['nome'];
+    $email =$_POST['email'];
 
-    $sql = 'INSERT INTO usuarios (nome, email) VALUES (?, ?)';
-    $stmt = $conn->prepare($sql);
+    $sql = 'INSERT INTO usuarios (nome, email) VALUES (?, ?)';$stmt = $conn->prepare($sql);
 
-    $stmt->bind_param("ss", $nome, $email);
-    $stmt->execute();
+    $stmt->bind_param("ss", $nome, $email);$stmt->execute();
 
     header('Location: index.php');
     exit;
@@ -30,53 +27,47 @@ if (isset($_POST['cadastrar'])) {
 // EXCLUIR
 if (isset($_GET['excluir'])) {
 
-    $id = $_GET['excluir'];
+    $id =$_GET['excluir'];
 
-    $sql = 'DELETE FROM usuarios WHERE id = ?';
-    $stmt = $conn->prepare($sql);
+    $sql = 'DELETE FROM usuarios WHERE id = ?';$stmt = $conn->prepare($sql);
 
-    $stmt->bind_param("i", $id);
-    $stmt->execute();
+    $stmt->bind_param("i", $id);$stmt->execute();
 
     header('Location: index.php');
     exit;
 }
 
-// EDITAR
+// EDITAR (PROCESSAMENTO DO FORMULÁRIO)
 if (isset($_POST['editar'])) {
 
-    $id = $_POST['id'];
-    $nome = $_POST['nome'];
-    $email = $_POST['email'];
+    $id =$_POST['id'];
+    $nome =$_POST['nome'];
+    $email =$_POST['email'];
 
     $sql = 'UPDATE usuarios SET nome = ?, email = ? WHERE id = ?';
     $stmt = $conn->prepare($sql);
 
-    $stmt->bind_param("ssi", $nome, $email, $id);
-    $stmt->execute();
+    $stmt->bind_param("ssi", $nome,$email, $id);$stmt->execute();
 
     header('Location: index.php');
     exit;
 }
 
-// BUSCAR DADOS DO USUÁRIO PARA EDICÃO
+// BUSCAR DADOS DO USUÁRIO PARA EDIÇÃO
 $usuario_editando = null;
-if (isset($_GET['editar'])) {
-    $id_editar = $_GET['editar'];
-    $sql_edit = 'SELECT id, nome, email FROM usuarios WHERE id = ?';
-    $stmt_edit = $conn->prepare($sql_edit);
-    $stmt_edit->bind_param("i", $id_editar);
-    $stmt_edit->execute();
-    $usuario_editando = $stmt_edit->get_result()->fetch_assoc();
+if (isset($_GET['editar'])) {$id_editar = $_GET['editar'];$sql_edit = 'SELECT id, nome, email FROM usuarios WHERE id = ?';
+    $stmt_edit =$conn->prepare($sql_edit);$stmt_edit->bind_param("i", $id_editar);$stmt_edit->execute();
+    $usuario_editando =$stmt_edit->get_result()->fetch_assoc();
 }
 
-// BUSCAR USUÁRIOS
+// LISTAR USUÁRIOS
 $sql = "SELECT id, nome, email FROM usuarios ORDER BY id DESC";
 $resultado = $conn->query($sql);
 
 ?>
 
-<html lang="en">
+<!DOCTYPE html>
+<html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
@@ -120,7 +111,7 @@ $resultado = $conn->query($sql);
             <th>Ações</th>
         </tr>
 
-        <?php while ($usuario = $resultado->fetch_assoc()) { ?>
+        <?php while ($usuario =$resultado->fetch_assoc()) { ?>
 
             <tr>
                 <td>
