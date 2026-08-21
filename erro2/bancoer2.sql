@@ -1,8 +1,8 @@
-CREATE DATABASE IF NOT EXISTS aula_erros
+CREATE DATABASE IF NOT EXISTS crud_aula
 CHARACTER SET utf8mb4
 COLLATE utf8mb4_unicode_ci;
 
-USE aula_erros;
+USE crud_aula;
 
 CREATE TABLE IF NOT EXISTS produtos (
     id INT AUTO_INCREMENT PRIMARY KEY,

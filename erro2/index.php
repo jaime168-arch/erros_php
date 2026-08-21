@@ -2,7 +2,7 @@
 
 $host = 'localhost';
 $user = 'root';
-$password = '';
+$password = 'root';
 $database = 'crud_aula';
 
 $conn = new mysqli($host, $user, $password, $database);
