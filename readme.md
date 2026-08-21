@@ -7,3 +7,16 @@ Documentação pedida do prof Ícaro Botelho e mostrando as falhas no index.php 
 ## Erro do primeiro código: erro1
 
 ### 1. Sintaxe Inválida nas tags curtas de PHP
+No HTML, a sintaxe de impressão rápida estava sem espaçamento entre tag '<?=' e a variável '$usuario':'''php
+
+<!-- Errado (Como estava no código feito pelo Ícaro): -->
+<td><?=$usuario['id'] ?></td>
+<td><?=$usuario['nome'] ?></td>
+<td><?=$usuario['email'] ?></td>
+<a href="index.php?excluir=<?=$usuario['id'] ?>">
+
+<!-- Corrigido pelo aluno: Jaime Rodrigues: -->
+<td><?= $usuario['id'] ?></td>
+<td><?= $usuario['nome'] ?></td>
+<td><?= $usuario['email'] ?></td>
+<a href="index.php?excluir=<?= $usuario['id'] ?>">
